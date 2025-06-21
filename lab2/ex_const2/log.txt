@@ -1,6 +1,0 @@
-##SEC_STUDENT_CAN_SEE
-  expand  cut    neg |  expand* cut*  neg* | bin(expand) bin(cut) bin(neg) | pass?
--------------------------------------------------------------------------------
-       5    89     -5 |        5    89     -5 | 00000101   01011001   11111011 |    -
-##END_STUDENT_CAN_SEE
-congratulation

@@ -7,7 +7,6 @@ module try_const (
         // o16 = 16'd90;                  // decimal
         // o16 = 16'h5A;                  // hexadecimal
         // o16 = -5;                      // negative signed
-        // o16 = 345;                     // truncated upper bits
         // o16 = 8'd255;                 // smaller constant auto-extend
 
         o16 = 16'h5A; // modify this
