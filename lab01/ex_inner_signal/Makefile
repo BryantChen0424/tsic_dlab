@@ -1,31 +1,33 @@
-# 可自行更改以下參數
-TOP       = inner_signal
-SRC_V     = $(TOP).v
-SRC_CPP   = $(TOP).cpp
-EXEC      = V$(TOP)
-OBJ_DIR   = obj_dir
-VCD       = wave.vcd
+TOP        = inner_signal
+DSRC_DIR   = design_src
+SSRC_DIR   = sim_src
+SRES_DIR   = sim_result
+GOLDEN_DIR = golden
+SRC_V      = $(DSRC_DIR)/*.v
+SRC_CPP    = $(SSRC_DIR)/$(TOP).cpp
+EXEC       = V$(TOP)
+OBJ_DIR    = $(SSRC_DIR)/obj_dir
+INDATA     = $(SSRC_DIR)/input.data
+VCD        = $(SRES_DIR)/wave.vcd
+LOG        = $(SRES_DIR)/log.txt
+RESULT     = $(SRES_DIR)/result.txt
 
-# verilator 的 flags
-VERILATOR_FLAGS = --trace
+VERILATOR_FLAGS = --public -Wno-WIDTHEXPAND -Wno-WIDTHTRUNC --hierarchical --trace-depth 100 --trace-structs --top-module $(TOP) --trace -Mdir $(OBJ_DIR)
+VERILATOR_ROOT ?= $(VERILATOR_ROOT)
 
 .PHONY: all dut test clean
 
-# make all：產生執行檔
 all: $(OBJ_DIR)/$(EXEC)
 
-# make dut：只產生 verilated C++ 模型（不編譯 testbench）
 dut:
 	verilator $(VERILATOR_FLAGS) --cc $(SRC_V)
 
-# make test：執行模擬（包含編譯）
-test: all
-	./$(OBJ_DIR)/$(EXEC)
-
-# 模型 + testbench 一起編譯成執行檔
 $(OBJ_DIR)/$(EXEC): $(SRC_V) $(SRC_CPP)
 	verilator $(VERILATOR_FLAGS) --cc $(SRC_V) --exe $(SRC_CPP) --build
 
-# make clean：清除所有生成檔
+test: all
+	sleep 0.5
+	./$(OBJ_DIR)/$(EXEC) $(INDATA) $(VCD) $(LOG) $(RESULT)
+
 clean:
-	rm -rf $(OBJ_DIR) $(VCD) *.txt
+	rm -rf $(OBJ_DIR) $(VCD) $(SRES_DIR)/*
