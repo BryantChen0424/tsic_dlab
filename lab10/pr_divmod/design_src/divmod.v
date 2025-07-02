@@ -8,50 +8,25 @@ module divmod (
     output reg [7:0] quotient,
     output reg [7:0] remainder
 );
-    localparam IDLE = 0,
+    localparam IDLE = 0, /* state code define */
                BUSY = 1,
                OUT  = 2;
     
-    reg [1:0] S, S_nxt;
-    reg [7:0] a, a_nxt;
+    reg [1:0] S, S_nxt; /* state register */
+    reg [7:0] a, a_nxt; /* other registers */
     reg [7:0] b, b_nxt;
     reg [7:0] q, q_nxt;
 
     always @(*) begin
         case (S)
             IDLE: begin
-                if (valid) begin
-                    a_nxt = dividend;
-                    b_nxt = divisor;
-                    q_nxt = 0;
-                    S_nxt = BUSY;
-                end
-                else begin
-                    a_nxt = a;
-                    b_nxt = b;
-                    q_nxt = 0;
-                    S_nxt = IDLE;
-                end
+                /* In state "IDLE", for the ??_nxt, what expression should be assigned to them? */
             end
             BUSY: begin
-                if (a < b) begin
-                    a_nxt = a;
-                    b_nxt = b;
-                    q_nxt = q;
-                    S_nxt = OUT;
-                end
-                else begin
-                    a_nxt = a - b;
-                    b_nxt = b;
-                    q_nxt = q + 1;
-                    S_nxt = BUSY;
-                end
+                /* In state "BUSY", for the ??_nxt, what expression should be assigned to them? */
             end
             OUT: begin
-                a_nxt = a;
-                b_nxt = b;
-                q_nxt = q;
-                S_nxt = IDLE;
+                /* In state "OUT", for the ??_nxt, what expression should be assigned to them? */
             end
             default: begin
                 a_nxt = 0;
@@ -64,22 +39,14 @@ module divmod (
 
     always @(posedge clk, negedge rst_n) begin
         if (~rst_n) begin
-            S <= IDLE;
-            a <= 0;
-            b <= 0;
-            q <= 0;
+            /* assign the initial state to S, a, b, q */
         end
         else begin
-            S <= S_nxt;
-            a <= a_nxt;
-            b <= b_nxt;
-            q <= q_nxt;
+            /* assign the ??_nxt to S, a, b, q */
         end
     end
 
     always @(*) begin
-        ready = S == OUT;
-        quotient = S == OUT ? q : 0;
-        remainder = S == OUT ? a : 0;
+        /* output signals assignment */
     end
 endmodule

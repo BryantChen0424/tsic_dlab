@@ -7,24 +7,16 @@ module counter10 (
 );
     reg [3:0] cnt_nxt;
 
-    // the combinational logic
+    // the D logic
     always @(*) begin
-        if (cnt == 9)
-            cnt_nxt = 0;
-        else
-            cnt_nxt = cnt + 1; 
 
-        // cnt_nxt = (cnt == 9) ? 0 : cnt + 1;
     end
 
-    // the sequential logic
+    // the Q logic
     always @(posedge clk, negedge rst_n) begin
-        if (!rst_n)
-            cnt <= 0;
-        else
-            cnt <= cnt_nxt;
+
     end
 
     // the output logic
-    // non
+
 endmodule

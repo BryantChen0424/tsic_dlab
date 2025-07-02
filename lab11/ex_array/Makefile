@@ -1,4 +1,4 @@
-TOP        = div
+TOP        = array
 DSRC_DIR   = design_src
 SSRC_DIR   = sim_src
 SRES_DIR   = sim_result

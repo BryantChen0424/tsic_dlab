@@ -25,9 +25,12 @@ dut:
 $(OBJ_DIR)/$(EXEC): $(SRC_V) $(SRC_CPP)
 	verilator $(VERILATOR_FLAGS) --cc $(SRC_V) --exe $(SRC_CPP) --build
 
-test: all
+test: clean_result all
 	sleep 0.5
 	./$(OBJ_DIR)/$(EXEC) $(INDATA) $(VCD) $(LOG) $(RESULT)
+
+clean_result:
+	rm -f $(LOG) $(RESULT)
 
 clean:
 	rm -rf $(OBJ_DIR) $(VCD) $(SRES_DIR)/*

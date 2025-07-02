@@ -8,12 +8,12 @@ module math (
     output reg [3:0] mod4
 );
     always @(*) begin
-        mul2 = a * 2;
-        div2 = a / 2;
-        mod2 = a % 2;
+        mul2 = /* assignmenmt here */
+        div2 = 
+        mod2 = 
 
-        mul4 = a * 4;
-        div4 = a / 4;
-        mod4 = a % 4;
+        mul4 = 
+        div4 = 
+        mod4 = 
     end
 endmodule

@@ -6,9 +6,6 @@ module mul (
     output reg       be4
 );
     always @(*) begin
-        mul2 = a << 1;
-        mul4 = a << 2;
-        mul8 = a << 3;
-        be4  = ~| a[1:0];
+        /* */
     end
 endmodule

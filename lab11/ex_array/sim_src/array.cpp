@@ -22,16 +22,19 @@ std::string bin(unsigned val) {
 }
 
 int main(int argc, char** argv) {
+    if (argc != 5) {
+        std::cout << "usage: obj <inputs> <waveform> <log> <reult>." << std::endl;
+    }
     Verilated::commandArgs(argc, argv);
     Verilated::traceEverOn(true);
     Varray* dut = new Varray;
     VerilatedVcdC* tfp = new VerilatedVcdC;
     dut->trace(tfp, 99);
-    tfp->open("wave.vcd");
+    tfp->open(argv[2]);
 
-    std::ifstream infile("input.data");
-    std::ofstream log("log.txt");
-    std::ofstream result("result.txt");
+    std::ifstream infile(argv[1]);
+    std::ofstream log(argv[3]);
+    std::ofstream result(argv[4]);
 
     log << "##SEC_STUDENT_CAN_SEE" << std::endl;
     std::cout << "##SEC_STUDENT_CAN_SEE" << std::endl;

@@ -4,7 +4,6 @@ module mask_even (
     output reg even1
 );
     always @(*) begin
-        mask = a & /* ??? */ 'b00001111;
-        even1 = /* ? */ ~^a;
+
     end
 endmodule
