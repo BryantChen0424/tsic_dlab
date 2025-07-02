@@ -33,4 +33,4 @@ clean_result:
 	rm -f $(LOG) $(RESULT)
 
 clean:
-	rm -rf $(OBJ_DIR) $(VCD) $(SRES_DIR)/*
+	rm -rf $(OBJ_DIR) $(VCD) $(LOG) $(RESULT)
