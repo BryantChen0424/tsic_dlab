@@ -89,6 +89,8 @@ int main(int argc, char** argv) {
         dut->clk = 0; dut->eval(); tfp->dump(t += PERIOD / 2);
         dut->clk = 1; dut->eval(); tfp->dump(t += PERIOD / 2);
         dut->i_valid = 0;
+        dut->i_a = 0;
+        dut->i_b = 0;
 
         int time_limit = t + PERIOD * 260;
         bool has_output = false;
@@ -104,7 +106,7 @@ int main(int argc, char** argv) {
                 if (out != golden) break;
             }
         }
-        // dut->clk = 0; dut->eval(); tfp->dump(t += PERIOD / 2);
+        dut->clk = 0; dut->eval(); tfp->dump(t += PERIOD / 2);
 
         if (!has_output) {
             global_fail = true;
@@ -118,6 +120,11 @@ int main(int argc, char** argv) {
             log << "Test case " << i + 1 << ": PASS" << std::endl;
             std::cout << "Test case " << i + 1 << ": PASS" << std::endl;
         }
+        
+        dut->clk = 1; dut->eval(); tfp->dump(t += PERIOD / 2);
+        dut->clk = 0; dut->eval(); tfp->dump(t += PERIOD / 2);
+        dut->clk = 1; dut->eval(); tfp->dump(t += PERIOD / 2);
+        dut->clk = 0; dut->eval(); tfp->dump(t += PERIOD / 2);
 
         tfp->dump(t += PERIOD);
         tfp->dump(t += PERIOD);

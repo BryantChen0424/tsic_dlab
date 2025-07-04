@@ -1,0 +1,12 @@
+##SEC_STUDENT_CAN_SEE
+Test case 1: PASS
+Test case 2: PASS
+Test case 3: PASS
+Test case 4: PASS
+Test case 5: PASS
+Test case 6: PASS
+Test case 7: PASS
+Test case 8: PASS
+Test case 9: PASS
+Test case 10: PASS
+##END_STUDENT_CAN_SEE
