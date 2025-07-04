@@ -13,4 +13,5 @@ module sw2way (
         na_and_nb = /* using inners signals here */
         sw        = /* using inners signals here */
     end
+
 endmodule
