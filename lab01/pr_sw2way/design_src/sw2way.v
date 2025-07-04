@@ -2,15 +2,15 @@ module sw2way (
     input  a,
     input  b,
     output reg na_and_nb,
-    output reg sw
+    // more output
 );
     reg not_a;
     reg not_b;
 
     always @(*) begin
-        /* inner signals assignment here */
+        /* inner signals assignment */
 
-        na_and_nb = /* using inners signals here */
-        sw        =
+        na_and_nb = /* using inners signals */
+        sw        = /* using inners signals */
     end
 endmodule
