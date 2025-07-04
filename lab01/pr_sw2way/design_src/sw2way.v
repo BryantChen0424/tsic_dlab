@@ -10,7 +10,7 @@ module sw2way (
     always @(*) begin
         /* inner signals assignment */
 
-        na_and_nb = /* using inners signals */
-        sw        = /* using inners signals */
+        na_and_nb = /* using inners signals here */
+        sw        = /* using inners signals here */
     end
 endmodule
