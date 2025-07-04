@@ -104,6 +104,7 @@ int main(int argc, char** argv) {
                 if (out != golden) break;
             }
         }
+        // dut->clk = 0; dut->eval(); tfp->dump(t += PERIOD / 2);
 
         if (!has_output) {
             global_fail = true;
