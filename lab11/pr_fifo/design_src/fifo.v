@@ -20,8 +20,6 @@ module fifo (
     integer i;
 
     always @(*) begin
-        w_fire = w_ready & w_valid;
-        r_fire = r_ready & r_valid;
         for (i = 0; i < 8; i = i + 1) begin
             /* R_nxt assignment */
         end

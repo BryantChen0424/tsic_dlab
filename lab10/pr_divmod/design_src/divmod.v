@@ -13,9 +13,9 @@ module divmod (
                OUT  = 2;
     
     reg [1:0] S, S_nxt; /* state register */
-    reg [7:0] a, a_nxt; /* other registers */
-    reg [7:0] b, b_nxt;
-    reg [7:0] q, q_nxt;
+     /* other registers */
+    
+    
 
     always @(*) begin
         case (S)
@@ -29,10 +29,7 @@ module divmod (
                 /* In state "OUT", for the ??_nxt, what expression should be assigned to them? */
             end
             default: begin
-                a_nxt = 0;
-                b_nxt = 0;
-                q_nxt = 0;
-                S_nxt = IDLE;
+
             end
         endcase
     end

@@ -1,7 +1,4 @@
 module sw2way (
-    input  a,
-    input  b,
-    output reg na_and_nb,
     // more output
 );
     reg not_a;
