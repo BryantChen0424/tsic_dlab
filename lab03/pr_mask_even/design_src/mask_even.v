@@ -4,6 +4,7 @@ module mask_even (
     output reg even1
 );
     always @(*) begin
-
+        mask = 
+        even1 = 
     end
 endmodule
