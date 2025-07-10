@@ -1,7 +1,7 @@
 module bigger (
-    input signed [3:0] a,
-    input signed [3:0] b,
-    input signed [3:0] c,
+    input [3:0] a,
+    input [3:0] b,
+    input [3:0] c,
     output reg bgt,
     output reg seq_bgt
 );
