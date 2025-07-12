@@ -32,10 +32,10 @@ int main(int argc, char **argv) {
     std::cout << "##SEC_STUDENT_CAN_SEE" << std::endl;
     logfile   << "##SEC_STUDENT_CAN_SEE\n";
 
-    std::cout << "char | in(hex) out(hex) | out*\n";
-    logfile  << "char | in(hex) out(hex) | out*\n";
-    std::cout << "-------------------------------\n";
-    logfile  << "-------------------------------\n";
+    std::cout << " in | out | pass?\n";
+    logfile  << " in | out | pass?\n";
+    std::cout << "--------------\n";
+    logfile  << "-------------\n";
 
     size_t timestamp = 0;
 
@@ -51,9 +51,8 @@ int main(int argc, char **argv) {
         if (!pass) any_fail = true;
 
         std::ostringstream line;
-        line << "  " << ch << "   |   0x" << std::hex << std::setw(2) << std::setfill('0') << (int)input
-             << "     0x" << std::setw(2) << (int)out
-             << "   |  0x" << std::setw(2) << (int)input
+        line << "  " << (char)input
+             << " | " << (char)out
              << "   | " << result;
 
         std::cout  << line.str() << "\n";

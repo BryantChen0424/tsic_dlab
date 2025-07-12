@@ -23,8 +23,8 @@ int main(int argc, char **argv) {
     log << "##SEC_STUDENT_CAN_SEE\n";
     std::cout << "##SEC_STUDENT_CAN_SEE" << std::endl;
 
-    log << " signal         |  bin       dec(u)   dec(s)   hex  |  PASS?\n";
-    std::cout << " signal         |  bin       dec(u)   dec(s)   hex  |  PASS?\n";
+    log << " signal         |  bin       dec   |  PASS?\n";
+    std::cout << " signal         |  bin       dec   |  PASS?\n";
 
     bool has_fail = false;
 
@@ -33,10 +33,8 @@ int main(int argc, char **argv) {
         std::ostringstream line;
         line << " " << std::left << std::setw(15) << name << "|  "
              << b.to_string() << "  "
-             << std::setw(8) << (actual & 0xFF) << "  "
-             << std::setw(8) << static_cast<int>((int8_t)(actual & 0xFF)) << "  "
-             << std::hex << std::uppercase << std::setw(3) << (actual & 0xFF)
-             << std::dec << "  |  "
+             << std::setw(4) << (actual & 0xFF) << "  "
+             << std::dec << "|  "
              << ((actual == golden) ? "-" : "fail");
 
         log << line.str() << "\n";
@@ -52,10 +50,8 @@ int main(int argc, char **argv) {
     check("of",             dut->of,            0);
     check("o1",             dut->o1,            0b00000101);
     check("o2",             dut->o2,            101);
-    check("o16",            dut->o16,           0x5A);
     check("o_auto_expand",  dut->o_auto_expand, 5);
     check("o_auto_cut",     dut->o_auto_cut,    345 & 0xFF);
-    check("o_neg",          dut->o_neg,         (uint8_t)-5);
 
     tfp->dump(10);
     tfp->dump(20);

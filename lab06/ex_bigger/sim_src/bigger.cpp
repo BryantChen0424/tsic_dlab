@@ -1,4 +1,3 @@
-
 #include "Vbigger.h"
 #include "verilated.h"
 #include "verilated_vcd_c.h"
@@ -8,10 +7,10 @@
 #include <bitset>
 #include <iomanip>
 
-std::string format_bin_dec_signed(int value, int bits) {
+std::string format_bin_dec_unsigned(int value, int bits) {
     std::bitset<4> b(value & ((1 << bits) - 1));
     std::ostringstream oss;
-    oss << b.to_string() << "(" << std::setw(3) << value << ")";
+    oss << b.to_string() << "(" << std::setw(3) << static_cast<unsigned int>(value) << ")";
     return oss.str();
 }
 
@@ -21,7 +20,8 @@ std::string format_bit(unsigned int value) {
 
 int main(int argc, char **argv) {
     if (argc != 5) {
-        std::cout << "usage: obj <inputs> <waveform> <log> <reult>." << std::endl;
+        std::cout << "usage: obj <inputs> <waveform> <log> <result>" << std::endl;
+        return 1;
     }
     Verilated::commandArgs(argc, argv);
     Vbigger* dut = new Vbigger;
@@ -37,8 +37,8 @@ int main(int argc, char **argv) {
     log << "##SEC_STUDENT_CAN_SEE" << std::endl;
     std::cout << "##SEC_STUDENT_CAN_SEE" << std::endl;
 
-    log << "        a        b        c       |     bgt   seq_bgt |  bgt*    seq_bgt* | PASS?" << std::endl;
-    std::cout << "        a        b        c       |     bgt   seq_bgt |  bgt*    seq_bgt* | PASS?" << std::endl;
+    log << "          a        b       c      |     bgt   seq_bgt |  bgt*    seq_bgt* | PASS?" << std::endl;
+    std::cout << "          a        b       c      |     bgt   seq_bgt |  bgt*    seq_bgt* | PASS?" << std::endl;
 
     int count = 0;
     bool has_fail = false;
@@ -47,14 +47,18 @@ int main(int argc, char **argv) {
     while (std::getline(infile, line)) {
         if (line.empty()) continue;
         std::istringstream iss(line);
-        int a, b, c;
-        if (!(iss >> a >> b >> c)) continue;
+        int a_raw, b_raw, c_raw;
+        if (!(iss >> a_raw >> b_raw >> c_raw)) continue;
 
-        dut->a = a;
-        dut->b = b;
-        dut->c = c;
+        dut->a = a_raw;
+        dut->b = b_raw;
+        dut->c = c_raw;
         dut->eval();
         tfp->dump(count++ * 10);
+
+        unsigned int a = static_cast<unsigned int>(a_raw);
+        unsigned int b = static_cast<unsigned int>(b_raw);
+        unsigned int c = static_cast<unsigned int>(c_raw);
 
         int bgt_g = (a > b) ? 1 : 0;
         int seq_g = (a > b && b > c) ? 1 : 0;
@@ -64,9 +68,9 @@ int main(int argc, char **argv) {
 
         std::ostringstream oss;
         oss << " "
-            << std::setw(10) << format_bin_dec_signed(a, 4) << " "
-            << std::setw(10) << format_bin_dec_signed(b, 4) << " "
-            << std::setw(10) << format_bin_dec_signed(c, 4) << " | "
+            << std::setw(10) << format_bin_dec_unsigned(a_raw, 4) << " "
+            << std::setw(10) << format_bin_dec_unsigned(b_raw, 4) << " "
+            << std::setw(10) << format_bin_dec_unsigned(c_raw, 4) << " | "
             << std::setw(7)  << format_bit(dut->bgt) << " "
             << std::setw(9)  << format_bit(dut->seq_bgt) << " | "
             << std::setw(6)  << format_bit(bgt_g) << " "

@@ -1,4 +1,3 @@
-
 #include "Vops.h"
 #include "verilated.h"
 #include "verilated_vcd_c.h"
@@ -9,11 +8,11 @@
 #include <iomanip>
 #include <cstdint>
 
-std::string format_bin_signed(int value, int bits) {
+std::string format_bin_unsigned(int value, int bits) {
     std::bitset<8> b(value & ((1 << bits) - 1));
     std::ostringstream oss;
     oss << b.to_string()
-        << "(s" << std::setw(4) << static_cast<int>(static_cast<int8_t>(value)) << ")";
+        << "(" << std::setw(3) << static_cast<unsigned int>(value) << ")";
     return oss.str();
 }
 
@@ -23,7 +22,8 @@ std::string format_bit(unsigned int value) {
 
 int main(int argc, char **argv) {
     if (argc != 5) {
-        std::cout << "usage: obj <inputs> <waveform> <log> <reult>." << std::endl;
+        std::cout << "usage: obj <inputs> <waveform> <log> <result>" << std::endl;
+        return 1;
     }
     Verilated::commandArgs(argc, argv);
     Vops* dut = new Vops;
@@ -39,8 +39,8 @@ int main(int argc, char **argv) {
     log << "##SEC_STUDENT_CAN_SEE" << std::endl;
     std::cout << "##SEC_STUDENT_CAN_SEE" << std::endl;
 
-    log << "         a              b           op |       o         |      o*         |   ovf  ovf* | PASS?" << std::endl;
-    std::cout << "         a              b           op |       o         |      o*         |   ovf  ovf* | PASS?" << std::endl;
+    log << "         a              b         op |       o       |      o*       | PASS?" << std::endl;
+    std::cout << "         a              b         op |       o       |      o*       | PASS?" << std::endl;
 
     int count = 0;
     bool has_fail = false;
@@ -57,39 +57,37 @@ int main(int argc, char **argv) {
         dut->eval();
         tfp->dump(count++ * 10);
 
-        int8_t sa = static_cast<int8_t>(a);
-        int8_t sb = static_cast<int8_t>(b);
-        int8_t result = 0;
-        int ovf_g = 0;
+        uint8_t ua = static_cast<uint8_t>(a);
+        uint8_t ub = static_cast<uint8_t>(b);
+        uint8_t result = 0;
 
         switch (op) {
             case 0:
-                result = sa + sb;
-                ovf_g = ((sa > 0 && sb > 0 && result < 0) || (sa < 0 && sb < 0 && result >= 0)) ? 1 : 0;
+                result = ua + ub;
                 break;
             case 1:
-                result = sa - sb;
-                ovf_g = ((sa > 0 && sb < 0 && result < 0) || (sa < 0 && sb > 0 && result >= 0)) ? 1 : 0;
+                result = (ub == 0) ? 0 : (ua % ub);
                 break;
             case 2:
-                result = a & b;
+                result = ua & ub;
                 break;
             case 3:
-                result = a | b;
+                result = ua | ub;
                 break;
+            default:
+                result = 0;
         }
 
-        bool pass = (dut->o == static_cast<uint8_t>(result)) && (dut->overflow == ovf_g);
+        bool pass = (dut->o == result);
         const char* pass_str = pass ? "-" : "fail";
         if (!pass) has_fail = true;
 
         std::ostringstream oss;
-        oss << " " << std::setw(16) << format_bin_signed(a, 8)
-            << " " << std::setw(12) << format_bin_signed(b, 8)
+        oss << " " << std::setw(16) << format_bin_unsigned(a, 8)
+            << " " << std::setw(12) << format_bin_unsigned(b, 8)
             << " " << format_bit(op) << " | "
-            << std::setw(12) << format_bin_signed(dut->o, 8) << " | "
-            << std::setw(12) << format_bin_signed(result, 8) << " | "
-            << format_bit(dut->overflow) << "  " << format_bit(ovf_g) << "  | " << pass_str;
+            << std::setw(12) << format_bin_unsigned(dut->o, 8) << " | "
+            << std::setw(12) << format_bin_unsigned(result, 8) << " | " << pass_str;
 
         std::string output_line = oss.str();
         log << output_line << std::endl;
