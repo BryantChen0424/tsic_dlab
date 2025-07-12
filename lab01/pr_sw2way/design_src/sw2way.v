@@ -12,7 +12,7 @@ module sw2way (
         not_a = ;
         not_b = ;
 
-        na_and_nb = /* using inners signals here */
-        sw        =
+        na_and_nb = ;/* using inners signals here */
+        sw        =; 
     end
 endmodule
