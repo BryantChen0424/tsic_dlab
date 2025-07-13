@@ -3,7 +3,7 @@ module try_const (
 );
 
     always @(*) begin
-        o16 = 8'd0; // modify this, try to output different values.
+        o16 = 8'd0; // modify this, try to output various values.
     end
 
 endmodule

@@ -9,7 +9,7 @@ module counter10 (
 
     // the D logic
     always @(*) begin
-
+        // is the cnt_nxt still cnt + 1 when cnt is '9' ?
     end
 
     // the Q logic

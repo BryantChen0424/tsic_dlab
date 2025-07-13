@@ -1,11 +1,11 @@
 module counter_onoff (
     input clk,
     input rst_n,
-    input sw,
-    output reg [5:0] cnt
+    input sw, // switch state signal
+    output reg [5:0] cnt // counter value
 );
 
-localparam OFF = 0, ON = 1;
+localparam OFF = 0, ON = 1; // OFF for holding, ON for running
 
 reg       S, S_nxt;
 reg [5:0] cnt_nxt;

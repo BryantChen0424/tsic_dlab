@@ -1,10 +1,10 @@
 module mod (
     input clk,
     input rst_n,
-    input valid,
+    input valid, // indicates the input data is valid at this cycle
     input [7:0] dividend,
     input [7:0] divisor,
-    output reg ready,
+    output reg ready, // one cycle pulse to indicate the output data is ready.
     output reg [7:0] remainder
 );
     localparam IDLE = 0,
@@ -18,30 +18,30 @@ module mod (
     always @(*) begin
         case (S)
             IDLE: begin
-                if (valid) begin
+                if (valid) begin // store the input data, because it is a valid.
                     a_nxt = dividend;
                     b_nxt = divisor;
                     S_nxt = BUSY;
                 end
-                else begin
+                else begin // hold the current value in registers
                     a_nxt = a;
                     b_nxt = b;
                     S_nxt = IDLE;
                 end
             end
             BUSY: begin
-                if (a < b) begin
+                if (a < b) begin // a is the remainder now
                     a_nxt = a;
                     b_nxt = b;
                     S_nxt = OUT;
                 end
-                else begin
+                else begin // a keep minus b
                     a_nxt = a - b;
                     b_nxt = b;
                     S_nxt = BUSY;
                 end
             end
-            OUT: begin
+            OUT: begin // go to IDLE directly because this cycle is the ready pulse.
                 a_nxt = a;
                 b_nxt = b;
                 S_nxt = IDLE;
@@ -68,6 +68,7 @@ module mod (
     end
 
     always @(*) begin
+        // assign the correct data when the ready pulse is actived
         ready = S == OUT;
         remainder = S == OUT ? a : 0;
     end

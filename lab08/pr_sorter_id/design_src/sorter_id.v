@@ -1,7 +1,7 @@
 module sorter_id (
-    input  [3:0] v0, v1, v2, v3,
-    output [3:0] o0, o1, o2, o3,
-    output [1:0] o3_id
+    input  [3:0] v0, v1, v2, v3, //input 4 random but unique non-negative integers
+    output [3:0] o0, o1, o2, o3, // output from min to max
+    output [1:0] o3_id // where is the max from? o0, 1, 2, 3?
 );
     /* need some wires ? */
 

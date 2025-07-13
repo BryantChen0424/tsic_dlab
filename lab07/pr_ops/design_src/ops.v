@@ -11,7 +11,7 @@ module ops (
                 o = //
             end
             2'b01: begin // op == 0, o = a % b
-                o =  //
+                o = //
             end
             2'b10: begin // op == 0, o = a & b
                 o = //
