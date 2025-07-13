@@ -1,5 +1,4 @@
-
-#include "Vrelu.h"
+#include "Vbound.h"
 #include "verilated.h"
 #include "verilated_vcd_c.h"
 #include <iostream>
@@ -8,28 +7,22 @@
 #include <bitset>
 #include <iomanip>
 
-std::string format_bin_signed(int value, int bits) {
+std::string format_bin_unsigned(int value, int bits) {
     std::bitset<8> b(value & ((1 << bits) - 1));
     std::ostringstream oss;
     oss << b.to_string()
-        << "(s" << std::setw(4) << static_cast<int>(value) << ")";
-    return oss.str();
-}
-
-std::string format_bin_signed_output(int value, int bits) {
-    std::bitset<8> b(value & ((1 << bits) - 1));
-    std::ostringstream oss;
-    oss << b.to_string()
-        << "(s" << std::setw(4) << static_cast<int>(static_cast<int8_t>(value)) << ")";
+        << "(u" << std::setw(3) << static_cast<unsigned int>(value) << ")";
     return oss.str();
 }
 
 int main(int argc, char **argv) {
     if (argc != 5) {
-        std::cout << "usage: obj <inputs> <waveform> <log> <reult>." << std::endl;
+        std::cout << "usage: obj <inputs> <waveform> <log> <result>" << std::endl;
+        return 1;
     }
+
     Verilated::commandArgs(argc, argv);
-    Vrelu* dut = new Vrelu;
+    Vbound* dut = new Vbound;
 
     Verilated::traceEverOn(true);
     VerilatedVcdC* tfp = new VerilatedVcdC;
@@ -42,8 +35,8 @@ int main(int argc, char **argv) {
     log << "##SEC_STUDENT_CAN_SEE" << std::endl;
     std::cout << "##SEC_STUDENT_CAN_SEE" << std::endl;
 
-    log << "     a                |  relu_a         |  relu_a*        | PASS?" << std::endl;
-    std::cout << "     a                |  relu_a         |  relu_a*        | PASS?" << std::endl;
+    log << "     a                |  bound_a        |  bound_a*       | PASS?" << std::endl;
+    std::cout << "     a                |  bound_a        |  bound_a*       | PASS?" << std::endl;
 
     int count = 0;
     bool has_fail = false;
@@ -59,17 +52,16 @@ int main(int argc, char **argv) {
         dut->eval();
         tfp->dump(count++ * 10);
 
-        int signed_a = static_cast<int8_t>(a);
-        int relu_g = (signed_a < 0) ? 0 : signed_a;
-
-        bool pass = (dut->relu_a == static_cast<uint8_t>(relu_g));
+        unsigned int ua = static_cast<unsigned int>(a);
+        unsigned int bound_g = (ua > 63) ? 63 : ua;
+        bool pass = (dut->bound_a == bound_g);
         const char* pass_str = pass ? "-" : "fail";
         if (!pass) has_fail = true;
 
         std::ostringstream oss;
-        oss << " " << std::setw(20) << format_bin_signed(a, 8) << " | "
-            << std::setw(15) << format_bin_signed_output(dut->relu_a, 8) << " | "
-            << std::setw(15) << format_bin_signed_output(relu_g, 8) << " | " << pass_str;
+        oss << " " << std::setw(20) << format_bin_unsigned(a, 8) << " | "
+            << std::setw(15) << format_bin_unsigned(dut->bound_a, 8) << " | "
+            << std::setw(15) << format_bin_unsigned(bound_g, 8) << " | " << pass_str;
 
         std::string output_line = oss.str();
         log << output_line << std::endl;
