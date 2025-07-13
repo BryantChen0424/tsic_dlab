@@ -1,8 +1,8 @@
 module sw2way (
     input  a,
     input  b,
-    output reg na_and_nb, // 
-    output reg sw
+    output reg na_and_nb, // = ~a & ~b
+    output reg sw // if exactly one of a or b is 1? 1 for yes.
 );
     reg not_a;
     reg not_b;
